@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Quicksand:wght@300;400;500;600;700&&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Hero Section -->
@@ -51,7 +51,7 @@
                     </div>
                     <p>Drag & Drop your APK files here</p>
                     <span>or</span>
-                    <button id="browseBtn" class="browse-btn">Browse Files</button>
+                    <button id="browseBtn" class="browse-btn">Browse APKs</button>
                 </div>
                 
                 <div class="files-list" id="filesList">
@@ -69,58 +69,70 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-chart-pie"></i> Our Detection Model</h2>
-            <p class="section-subtitle">Powered by advanced machine learning algorithms</p>
-            
+<!-- About Section -->
+<section id="about" class="about-section">
+    <div class="container">
+        <h2 class="section-title"><i class="fas fa-chart-pie"></i> Our Detection Model</h2>
+        <p class="section-subtitle">Powered by advanced machine learning algorithms</p>
+        
             <div class="stats-container">
                 <div class="stat-box">
-                    <div class="stat-icon">
-                        <i class="fas fa-database"></i>
+                    <svg class="circular-progress" viewBox="0 0 100 100">
+                        <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="progress-bar" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <div class="stat-content">
+                        <h3>Accuracy</h3>
+                        <div class="stat-number" data-value="95.34" data-max-value="100">0.00</div>
+                        <div class="stat-percent">%</div>
                     </div>
-                    <h3>Training Samples</h3>
-                    <div class="stat-number" data-value="750">0</div>
-                    <div class="stat-plus">+</div>
                 </div>
-                
-                <div class="stat-box">
-                    <div class="stat-icon">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <h3>Accuracy</h3>
-                    <div class="stat-number" data-value="93.34">0</div>
-                    <div class="stat-percent">%</div>
-                </div>
-                
-                <div class="stat-box">
-                    <div class="stat-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>F1 Score</h3>
-                    <div class="stat-number" data-value="97.34">0</div>
-                    <div class="stat-percent">%</div>
-                </div>
-                
-                <div class="stat-box">
-                    <div class="stat-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
+                    
+
+            <div class="stat-box">
+                <svg class="circular-progress" viewBox="0 0 100 100">
+                    <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-bar" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="stat-content">
                     <h3>Precision</h3>
-                    <div class="stat-number" data-value="92.34">0</div>
+                    <div class="stat-number" data-value="92.34" data-max-value="100">0.00</div>
                     <div class="stat-percent">%</div>
                 </div>
             </div>
-            
-            <div class="about-content">
-                <div class="about-text">
-                    <h3>How It Works</h3>
-                    <p>Our advanced detection system uses deep learning algorithms to analyze APK files and identify potential ransomware threats with high accuracy. The model examines file signatures, permission requests, code patterns, and behavior indicators to provide reliable detection results.</p>
+            <div class="stat-box">
+                <svg class="circular-progress" viewBox="0 0 100 100">
+                    <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-bar" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="stat-content">
+                    <h3>Recall</h3>
+                    <div class="stat-number" data-value="87.88" data-max-value="100">0.00</div>
+                    <div class="stat-plus">%</div>
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <svg class="circular-progress" viewBox="0 0 100 100">
+                    <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-bar" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="stat-content">
+                    <h3>F1 Score</h3>
+                    <div class="stat-number" data-value="93.41" data-max-value="100">0.00</div>
+                    <div class="stat-percent">%</div>
                 </div>
             </div>
         </div>
-    </section>
+        
+        <div class="about-content">
+            <div class="about-text">
+                <h3>How It Works</h3>
+                <p>Our advanced detection system uses deep learning algorithms to analyze APK files and identify potential ransomware threats with high accuracy. The model examines file signatures, permission requests, code patterns, and behavior indicators to provide reliable detection results.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="footer">
