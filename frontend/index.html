@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ransom Check - APK Ransomware Detector</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="animate__animated animate__fadeInDown">RANSOM CHECK</h1>
+                <p class="animate__animated animate__fadeInUp">Upload your APKs and let our model detect ransomware in seconds.
+                    Fast, accurate, and built for next-gen cyber security.</p>
+                <div class="u-center">
+                    <button href="#upload" id="scanBtn" class="glow-btn animate__animated animate__fadeInUp">
+                        <i class="fas fa-shield-alt"></i> SCAN APK
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image animate__animated animate__fadeIn">
+                <img src="./assets/bgImage.webp" alt="Cybersecurity Illustration">
+            </div>
+            
+        </div>
+        <div class="hero-wave">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#0c1e3a" fill-opacity="1" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,229.3C672,256,768,288,864,272C960,256,1056,192,1152,170.7C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload" class="upload-section">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-upload"></i> Upload APK Files</h2>
+            <p class="section-subtitle">Upload multiple APK files for instant ransomware detection</p>
+            
+            <div class="upload-container">
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" multiple accept=".apk" hidden>
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <p>Drag & Drop your APK files here</p>
+                    <span>or</span>
+                    <button id="browseBtn" class="browse-btn">Browse Files</button>
+                </div>
+                
+                <div class="files-list" id="filesList">
+                    <!-- Files will be listed here -->
+                </div>
+                
+                <button id="submitBtn" class="submit-btn" disabled>
+                    <i class="fas fa-search"></i> Scan For Threats
+                </button>
+                
+                <div id="resultArea" class="result-area">
+                    <!-- Results will appear here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-chart-pie"></i> Our Detection Model</h2>
+            <p class="section-subtitle">Powered by advanced machine learning algorithms</p>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Training Samples</h3>
+                    <div class="stat-number" data-value="750">0</div>
+                    <div class="stat-plus">+</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Accuracy</h3>
+                    <div class="stat-number" data-value="93.34">0</div>
+                    <div class="stat-percent">%</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>F1 Score</h3>
+                    <div class="stat-number" data-value="97.34">0</div>
+                    <div class="stat-percent">%</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Precision</h3>
+                    <div class="stat-number" data-value="92.34">0</div>
+                    <div class="stat-percent">%</div>
+                </div>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>How It Works</h3>
+                    <p>Our advanced detection system uses deep learning algorithms to analyze APK files and identify potential ransomware threats with high accuracy. The model examines file signatures, permission requests, code patterns, and behavior indicators to provide reliable detection results.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>RANSOM CHECK</h2>
+                    <p>Protecting your devices from ransomware threats</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#hero">Home</a></li>
+                            <li><a href="#upload">Scan APK</a></li>
+                            <li><a href="#about">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>Connect</h3>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Ransom Check. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
