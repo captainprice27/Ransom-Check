@@ -49,6 +49,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   margin-bottom: 10px;
   background: linear-gradient(90deg, var(--accent), #0fe3ff);
+  background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   position: relative;
@@ -68,6 +69,74 @@ button {
   cursor: pointer;
   border: none;
   outline: none;
+}
+
+/* Add these styles to your CSS file */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  z-index: 9999;
+  animation: slide-in 0.3s ease-out forwards;
+  max-width: 350px;
+  display: flex;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.notification.info {
+  background-color: #3498db;
+  color: white;
+  border-left: 4px solid #2980b9;
+}
+
+.notification.success {
+  background-color: #2ecc71;
+  color: white;
+  border-left: 4px solid #27ae60;
+}
+
+.notification.warning {
+  background-color: #f39c12;
+  color: white;
+  border-left: 4px solid #e67e22;
+}
+
+.notification.error {
+  background-color: #e74c3c;
+  color: white;
+  border-left: 4px solid #c0392b;
+}
+
+.notification.fade-out {
+  opacity: 0;
+}
+
+@keyframes slide-in {
+  from {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  from {
+      transform: translateX(0);
+      opacity: 1;
+  }
+  to {
+      transform: translateX(100%);
+      opacity: 0;
+  }
 }
 
 /* Hero Section */
@@ -582,10 +651,14 @@ button {
   margin-bottom: 30px;
 }
 
+.footer-logo a{
+  text-decoration: none;
+}
+
 .footer-logo h2 {
   font-size: 2rem;
   margin-bottom: 10px;
-  color: var(--text-light);
+  color: var(--text-light);  
 }
 
 .footer-logo p {
@@ -642,7 +715,7 @@ button {
   height: 36px;
   border-radius: 50%;
   background: rgba(78, 131, 253, 0.2);
-  color: #238dfe;
+  color: #53a3f9;
   font-size: 1.2rem;
   transition: all 0.3s ease;
 }
@@ -776,7 +849,7 @@ button {
   }
 }
 
-/* Custom Scrollbar */
+/* Custom bar */
 ::-webkit-scrollbar {
   width: 8px;
 }

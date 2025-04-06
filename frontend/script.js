@@ -85,6 +85,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 uploadedFiles.push(file);
                 addFileToList(file);
             }
+            else
+            {
+                showNotification('You have already uploaded this file before');
+                return;
+            }
         });
         
         // Enable submit button if there are files
@@ -171,7 +176,24 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
-        notification.textContent = message;
+        
+        // Add icon based on notification type
+        let icon = '';
+        switch(type) {
+            case 'success':
+                icon = '<i class="fas fa-check-circle" style="margin-right: 10px;"></i>';
+                break;
+            case 'warning':
+                icon = '<i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>';
+                break;
+            case 'error':
+                icon = '<i class="fas fa-times-circle" style="margin-right: 10px;"></i>';
+                break;
+            default: // info
+                icon = '<i class="fas fa-info-circle" style="margin-right: 10px;"></i>';
+        }
+        
+        notification.innerHTML = `${icon}${message}`;
         
         // Add to body
         document.body.appendChild(notification);
@@ -180,7 +202,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             notification.classList.add('fade-out');
             setTimeout(() => {
-                document.body.removeChild(notification);
+                if (notification.parentNode) {
+                    document.body.removeChild(notification);
+                }
             }, 500);
         }, 3000);
     }
@@ -236,11 +260,9 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = false;
     }
     
-    // Animation for the original statistics counters
-    const statNumbers = document.querySelectorAll('.stat-box .stat-number');
+    // Animation for the circular statistics counters (stat-box)
     const statBoxes = document.querySelectorAll('.stat-box');
-    const aboutSection = document.getElementById('about');
-    const progressBars = document.querySelectorAll('.progress-bar');
+    const progressBars = document.querySelectorAll('.stat-box .progress-bar');
 
     // Calculate the circumference of the circle
     const radius = 45; // Same as in the SVG
@@ -252,38 +274,38 @@ document.addEventListener('DOMContentLoaded', function() {
         bar.style.strokeDashoffset = circumference; // Initially full offset (no progress)
     });
     
-    if (aboutSection) {
-        const aboutObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Animate counters when section enters view
-                    statNumbers.forEach((statNumber, index) => {
-                        const value = parseFloat(statNumber.dataset.value);
-                        const maxValue = parseFloat(statNumber.dataset.maxValue || 100);
-                        const progressBar = progressBars[index];
-                        
-                        // Animate both counter and circular progress
-                        animateDecimalValue(statNumber, 0, value, 1500, progressBar, maxValue);
-                    });
-                } else {
-                    // Reset counters when section leaves view
-                    statNumbers.forEach((statNumber, index) => {
-                        statNumber.textContent = '0.00';
-                        
-                        // Reset circular progress
-                        if (progressBars[index]) {
-                            progressBars[index].style.strokeDashoffset = circumference;
-                        }
-                    });
+    // MODIFIED: Create observer for each stat-box
+    const statBoxObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Find the stat number element within this stat box
+                const statNumber = entry.target.querySelector('.stat-number');
+                const progressBar = entry.target.querySelector('.progress-bar');
+                
+                if (statNumber) {
+                    const value = parseFloat(statNumber.dataset.value);
+                    const maxValue = parseFloat(statNumber.dataset.maxValue || 100);
+                    
+                    // Reset values before animation
+                    statNumber.textContent = '0.00';
+                    if (progressBar) {
+                        progressBar.style.strokeDashoffset = circumference;
+                    }
+                    
+                    // Animate both counter and circular progress
+                    animateDecimalValue(statNumber, 0, value, 1500, progressBar, maxValue);
                 }
-            });
-        }, {
-            threshold: 0.05,
-            rootMargin: '0px 0px -50px 0px'
+            }
         });
+    }, {
+        threshold: 0.05,
+        rootMargin: '0px 0px -50px 0px'
+    });
 
-        aboutObserver.observe(aboutSection);
-    }
+    // Observe each stat-box
+    statBoxes.forEach(box => {
+        statBoxObserver.observe(box);
+    });
 
     // Animation function for decimal values with circular progress
     function animateDecimalValue(element, start, end, duration, progressBar, maxValue) {
@@ -314,8 +336,8 @@ document.addEventListener('DOMContentLoaded', function() {
         window.requestAnimationFrame(step);
     }
     
-    // NEW ANIMATION for stat-box-1 elements (whole numbers only)
-    const statBox1Numbers = document.querySelectorAll('.stat-box-1 .stat-number');
+    // MODIFIED: Observer for stat-box-1 elements (whole numbers only)
+    const statBox1s = document.querySelectorAll('.stat-box-1');
     
     // Set up the Intersection Observer for stat-box-1 elements
     const statBox1Observer = new IntersectionObserver((entries) => {
@@ -324,11 +346,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Find the stat number element within this stat box
                 const statNumber = entry.target.querySelector('.stat-number');
                 if (statNumber) {
+                    // Reset counter to 0 before starting animation
+                    statNumber.textContent = '0';
+                    
                     const value = parseInt(statNumber.dataset.value);
                     // Start the animation from 0 to the target value
                     animateWholeValue(statNumber, 0, value, 1500);
-                    // Unobserve after animation starts to prevent retriggering
-                    statBox1Observer.unobserve(entry.target);
                 }
             }
         });
@@ -338,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Observe all stat-box-1 elements
-    document.querySelectorAll('.stat-box-1').forEach(box => {
+    statBox1s.forEach(box => {
         statBox1Observer.observe(box);
     });
 
