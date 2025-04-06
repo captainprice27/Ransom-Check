@@ -209,56 +209,133 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
     
-    function handleSubmit() {
-        // Show loading state
-        submitBtn.disabled = true;
-        resultArea.style.display = 'block';
-        resultArea.innerHTML = `
-            <div class="loading">
-                <div class="loading-spinner"></div>
-                <div style="margin-left: 15px;">Analyzing APK files...</div>
-            </div>
-        `;
-        
-        // Simulate API call (replace with actual fetch to your Flask backend)
-        setTimeout(() => {
-            simulateApiResponse();
-        }, 2500);
+    // Define API URL constant (currently empty for testing)
+const API_URL = '';
+
+function handleSubmit() {
+    // Show loading state
+    submitBtn.disabled = true;
+    resultArea.style.display = 'block';
+    resultArea.innerHTML = `
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <div style="margin-left: 15px;">Analyzing APK files...</div>
+        </div>
+    `;
+    
+    // Call the updated function to process files
+    simulateApiResponse();
+}
+
+function simulateApiResponse() {
+    if (!API_URL) {
+        // Server is down or API URL not configured
+        showServerError("The server is down at the moment. Please try again later.");
+        return;
     }
     
-    function simulateApiResponse() {
-        // For demo purposes, randomly decide if files are safe or not
-        const isThreat = Math.random() > 0.5;
-        
-        if (isThreat) {
-            resultArea.innerHTML = `
-                <div class="result-threat result-appear">
-                    <div class="result-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div>Ransomware Detected!</div>
-                </div>
-                <div style="margin-top: 15px; color: #ff6b6b;">
-                    Malicious code detected in one or more files. We recommend not installing these APKs.
-                </div>
-            `;
-        } else {
-            resultArea.innerHTML = `
-                <div class="result-safe result-appear">
-                    <div class="result-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div>No Threats Detected</div>
-                </div>
-                <div style="margin-top: 15px; color: #a0e9af;">
-                    The analyzed APK files appear to be safe and free from ransomware.
-                </div>
-            `;
-        }
-        
+    // Prepare form data with uploaded files
+    const formData = new FormData();
+    uploadedFiles.forEach(file => {
+        formData.append('files', file);
+    });
+    
+    // Setup timeout to handle long requests
+    const timeoutDuration = 30000; // 30 seconds timeout
+    let timeoutId = setTimeout(() => {
+        showServerError("Request timed out. The server may be down at the moment.");
+    }, timeoutDuration);
+    
+    // Make API request
+    fetch(API_URL, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        clearTimeout(timeoutId); // Clear timeout as we got a response
+        return response.json();
+    })
+    .then(data => {
+        processApiResponse(data);
+    })
+    .catch(error => {
+        clearTimeout(timeoutId); // Clear timeout as we got an error
+        console.error('Error:', error);
+        showServerError("Failed to connect to the server. Please try again later.");
+    })
+    .finally(() => {
         // Re-enable submit button
         submitBtn.disabled = false;
+    });
+}
+
+function processApiResponse(response) {
+    // Check for invalid response
+    if (!response || response.status !== 200 || !response.results || response.results.length === 0) {
+        const message = response && response.message ? response.message : "The server returned an invalid response.";
+        showServerError(message);
+        return;
     }
+    
+    // Valid response with results
+    let resultsHTML = '<div class="results-container">';
+    
+    // Process each file result
+    response.results.forEach(result => {
+        const isThreat = result.class === "Ransomware";
+        const threatProbability = (result.probability * 100).toFixed(1);
+        
+        resultsHTML += `
+            <div class="file-result">
+                <div class="file-result-header">
+                    <div class="file-name">${result.fileName}</div>
+                    <div class="file-probability">Confidence: ${threatProbability}%</div>
+                </div>
+                ${isThreat ? 
+                    `<div class="result-threat result-appear">
+                        <div class="result-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>Ransomware Detected!</div>
+                    </div>
+                    <div class="threat-details">
+                        This file contains potential malicious code. We recommend not installing this APK.
+                    </div>` 
+                    : 
+                    `<div class="result-safe result-appear">
+                        <div class="result-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>No Threats Detected</div>
+                    </div>
+                    <div class="safe-details">
+                        This file appears to be safe and free from ransomware.
+                    </div>`
+                }
+            </div>
+        `;
+    });
+    
+    resultsHTML += '</div>';
+    resultArea.innerHTML = resultsHTML;
+}
+
+function showServerError(message) {
+    resultArea.innerHTML = `
+        <div class="result-busy result-appear">
+            <div class="result-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div>Internal Server Error</div>
+        </div>
+        <div style="margin-top: 15px; color: #ffc107;">
+            ${message}
+        </div>
+    `;
+    
+    // Re-enable submit button
+    submitBtn.disabled = false;
+}
     
     // Animation for the circular statistics counters (stat-box)
     const statBoxes = document.querySelectorAll('.stat-box');
