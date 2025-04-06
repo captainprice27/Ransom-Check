@@ -994,4 +994,19 @@ button {
   .u-center{
     width: 100%;
   }
+  .footer-logo{
+    text-align: center;
+  }
+  .footer-links-column h3{
+    text-align: center;
+  }
+  .footer-links-column li{
+    margin-left: 10px;
+  }
+  .social-links{
+    justify-content: center;
+  }
+  .stat-box-1{
+    margin: 0 9px;
+  }
 }
