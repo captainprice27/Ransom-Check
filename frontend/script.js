@@ -61,7 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Submit button
     if (submitBtn) {
-        submitBtn.addEventListener('click', handleSubmit);
+        submitBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // ✅ Prevent form submission
+            e.stopPropagation();        // stop bubbling up
+            handleSubmit();             // call your API logic
+            return false;               // absolutely prevent reload
+            // handleSubmit();
+        });
     }
     
     // Functions
@@ -210,10 +216,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Define API URL constant (currently empty for testing)
-const API_URL = '';
+const API_URL = 'http://127.0.0.1:5000/predict';
 
 function handleSubmit() {
     // Show loading state
+    // e?.preventDefault();
     submitBtn.disabled = true;
     resultArea.style.display = 'block';
     resultArea.innerHTML = `
@@ -229,45 +236,34 @@ function handleSubmit() {
 
 function simulateApiResponse() {
     if (!API_URL) {
-        // Server is down or API URL not configured
         showServerError("The server is down at the moment. Please try again later.");
         return;
     }
-    
-    // Prepare form data with uploaded files
+
     const formData = new FormData();
     uploadedFiles.forEach(file => {
         formData.append('files', file);
     });
-    
-    // Setup timeout to handle long requests
-    const timeoutDuration = 30000; // 30 seconds timeout
-    let timeoutId = setTimeout(() => {
-        showServerError("Request timed out. The server may be down at the moment.");
-    }, timeoutDuration);
-    
-    // Make API request
+
+    // Make API request without any timeout
     fetch(API_URL, {
         method: 'POST',
-        body: formData
+        body: formData,
+        redirect: 'manual'
     })
-    .then(response => {
-        clearTimeout(timeoutId); // Clear timeout as we got a response
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
         processApiResponse(data);
     })
     .catch(error => {
-        clearTimeout(timeoutId); // Clear timeout as we got an error
         console.error('Error:', error);
         showServerError("Failed to connect to the server. Please try again later.");
     })
     .finally(() => {
-        // Re-enable submit button
         submitBtn.disabled = false;
     });
 }
+
 
 function processApiResponse(response) {
     // Check for invalid response
