@@ -65,14 +65,18 @@ def predict():
             input_tensor = np.expand_dims(rgb_image, axis=0)
 
             logger.info(f"Making prediction for: {filename}")
-            prediction = model.predict(input_tensor)[0]
-            predicted_class = "Ransomware" if np.argmax(prediction) == 1 else "Benign"
-            confidence = float(np.max(prediction))
+
+            prediction = model.predict(input_tensor)
+
+            # prediction = model.predict(input_tensor)[0]
+            logger.info(prediction)
+            predicted_class = "Benign" if np.argmax(prediction[0]) == 1 else "Ransomware"
+            confidence = float(np.max(prediction[0]))
 
             results.append({
                 "fileName": filename,
                 "class": predicted_class,
-                "probability": round(confidence, 4)
+                "probability": confidence
             })
 
             logger.info(f"Prediction for {filename}: {predicted_class} ({confidence:.4f})")
@@ -93,3 +97,8 @@ def predict():
         "message": "Prediction successful.",
         "status": 200
     })
+
+
+@api.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({"pong": True}), 200

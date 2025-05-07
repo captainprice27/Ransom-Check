@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const filesList = document.getElementById('filesList');
     const submitBtn = document.getElementById('submitBtn');
     const resultArea = document.getElementById('resultArea');
-    
+    console.log(resultArea);
     // Store uploaded files
     let uploadedFiles = [];
     
@@ -61,11 +61,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Submit button
     if (submitBtn) {
-        submitBtn.addEventListener('click', function(e) {
+        submitBtn.addEventListener('click', async function(e) {
+            console.log(uploadedFiles.length);
             e.preventDefault(); // ✅ Prevent form submission
-            e.stopPropagation();        // stop bubbling up
-            handleSubmit();             // call your API logic
-            return false;               // absolutely prevent reload
+            // e.stopPropagation();        // stop bubbling up
+            await handleSubmit();             // call your API logic
+            // return false;               // absolutely prevent reload
             // handleSubmit();
         });
     }
@@ -218,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Define API URL constant (currently empty for testing)
 const API_URL = 'http://127.0.0.1:5000/predict';
 
-function handleSubmit() {
+async function handleSubmit() {
     // Show loading state
     // e?.preventDefault();
     submitBtn.disabled = true;
@@ -231,10 +232,10 @@ function handleSubmit() {
     `;
     
     // Call the updated function to process files
-    simulateApiResponse();
+    await simulateApiResponse();
 }
 
-function simulateApiResponse() {
+async function simulateApiResponse() {
     if (!API_URL) {
         showServerError("The server is down at the moment. Please try again later.");
         return;
@@ -244,28 +245,52 @@ function simulateApiResponse() {
     uploadedFiles.forEach(file => {
         formData.append('files', file);
     });
-
-    // Make API request without any timeout
-    fetch(API_URL, {
-        method: 'POST',
-        body: formData,
-        redirect: 'manual'
-    })
-    .then(response => response.json())
-    .then(data => {
-        processApiResponse(data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showServerError("Failed to connect to the server. Please try again later.");
-    })
-    .finally(() => {
+    console.log('sendig data');
+    try{
+        const res = await axios.post(API_URL, formData
+            ,{
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json',
+                }
+            }
+        );
+        console.log(res.data);
+        processApiResponse(res.data);
         submitBtn.disabled = false;
-    });
+    }
+    catch(err){
+        console.log(err);
+    }
+    
+    // axios.post(API_URL, formData, {
+    //     headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //         'Accept': 'application/json',
+    //     }
+    // })
+    // .then(response => {
+    //     console.log(response.data);
+    //     processApiResponse(response.data);
+    // })
+    // .catch(error => {
+    //     console.error('Axios error:', error);
+    //     let message = "Failed to connect to the server.";
+    //     if (error.response && error.response.data && error.response.data.message) {
+    //         message = error.response.data.message;
+    //     }
+    //     showServerError(message);
+    // })
+    // .finally(() => {
+    //     submitBtn.disabled = false;
+    // });
 }
 
 
+
 function processApiResponse(response) {
+
+    console.log(response.status);
     // Check for invalid response
     if (!response || response.status !== 200 || !response.results || response.results.length === 0) {
         const message = response && response.message ? response.message : "The server returned an invalid response.";
@@ -279,7 +304,7 @@ function processApiResponse(response) {
     // Process each file result
     response.results.forEach(result => {
         const isThreat = result.class === "Ransomware";
-        const threatProbability = (result.probability * 100).toFixed(1);
+        const threatProbability = (result.probability * 100).toFixed(2);
         
         resultsHTML += `
             <div class="file-result">
@@ -473,3 +498,4 @@ function showServerError(message) {
         });
     });
 });
+
