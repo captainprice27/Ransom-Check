@@ -216,8 +216,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
     
-    // Define API URL constant (currently empty for testing)
-const API_URL = 'http://127.0.0.1:5000/predict';
+// Define API URL constant (currently empty for testing)
+const API_URL = 'http://localhost:5000/predict';
 
 async function handleSubmit() {
     // Show loading state
