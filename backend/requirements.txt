@@ -1,0 +1,13 @@
+flask
+flask-cors
+gunicorn
+numpy
+pillow
+tensorflow
+keras
+androguard
+beautifulsoup4
+python-tlsh
+capstone
+imageio
+werkzeug

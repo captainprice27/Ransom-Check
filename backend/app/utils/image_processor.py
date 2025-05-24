@@ -3,9 +3,9 @@ import numpy as np
 from PIL import Image
 import logging
 
-from app.utils.Texture import texture
-from app.utils.Opcode import opcode
-from app.utils.FuzzyHash import fuzzyhash
+from .Texture import texture
+from .Opcode import opcode
+from .FuzzyHash import fuzzyhash
 
 # Configure logger
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ def generate_rgb_image(apk_path: str, dims: int = 64) -> np.ndarray:
         B = fuzzyhash(apk_path, dims)
 
         logger.info("Stacking RGB channels...")
-        rgb_image = np.stack([R, G, B], axis=-1).astype('float32') / 255.0
+        rgb_image = np.stack([R, G, B], axis=-1).astype('float32')
 
         logger.info("Image generation successful.")
         return rgb_image

@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 from tensorflow.keras.models import load_model
 
-from app.utils.image_processor import generate_rgb_image
+from .utils.image_processor import generate_rgb_image
 import logging
 
 # Set up blueprint and logging
@@ -70,7 +70,7 @@ def predict():
 
             # prediction = model.predict(input_tensor)[0]
             logger.info(prediction)
-            predicted_class = "Benign" if np.argmax(prediction[0]) == 1 else "Ransomware"
+            predicted_class = "Ransomware" if np.argmax(prediction[0]) == 1 else "Benign"
             confidence = float(np.max(prediction[0]))
 
             results.append({
