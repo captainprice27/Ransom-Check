@@ -31,9 +31,9 @@ The goal is to provide accurate and interpretable detection of malicious applica
 
 ### 🔧 Backend Setup
 
-1.  Navigate to the project root if not already there:
+1.  Navigate to the backend directory:
     
-    `cd Ransom-Check` 
+    `cd backend` 
     
 2.  Install required Python dependencies:
     
