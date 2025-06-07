@@ -1,4 +1,4 @@
-(Forked from Major Project Teammate : Ishan Dasgupta(https://github.com/ishan-dg-coldmonk))
+Forked from Major Project Teammate : **Ishan Dasgupta** (https://github.com/ishan-dg-coldmonk)
 
 # 🛡️ Android Ransomware Detection by RGB Image Generation and Classification
 
